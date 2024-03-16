@@ -13,5 +13,4 @@ public class ReaderDto {
     private int id;
     private String name;
     private List<BookDto> bookDtoList;
-
 }
