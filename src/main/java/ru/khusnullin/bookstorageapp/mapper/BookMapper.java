@@ -2,8 +2,16 @@ package ru.khusnullin.bookstorageapp.mapper;
 
 import ru.khusnullin.bookstorageapp.dto.BookDto;
 import ru.khusnullin.bookstorageapp.entity.Book;
+import ru.khusnullin.bookstorageapp.repository.ReaderRepository;
 
 public class BookMapper {
+
+    private final ReaderRepository readerRepository;
+
+    public BookMapper() {
+        this.readerRepository = new ReaderRepository();
+    }
+
     public BookDto mapBookToDto(Book book) {
         BookDto bookDto = new BookDto();
         bookDto.setId(book.getId());
@@ -18,7 +26,7 @@ public class BookMapper {
         Book book = new Book();
         book.setTitle(bookDto.getTitle());
         book.setDescription("Default description");
-        //book.setReader(bookDto.getReaderName());
+        book.setReader(readerRepository.findById(bookDto.getReaderId()));
         return book;
     }
 }

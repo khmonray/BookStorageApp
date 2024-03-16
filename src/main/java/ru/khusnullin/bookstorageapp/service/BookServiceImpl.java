@@ -1,10 +1,12 @@
 package ru.khusnullin.bookstorageapp.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.khusnullin.bookstorageapp.dto.BookDto;
 import ru.khusnullin.bookstorageapp.entity.Book;
 import ru.khusnullin.bookstorageapp.mapper.BookMapper;
 import ru.khusnullin.bookstorageapp.repository.BookRepository;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,10 +29,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto addBook(BookDto bookDto) {
-        Book book = bookMapper.mapBookDtoToBook(bookDto);
-        bookRepository.save(book);
-        return bookDto;
+    public void addBook(String json) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            BookDto bookDto = objectMapper.readValue(json, BookDto.class);
+            Book book = bookMapper.mapBookDtoToBook(bookDto);
+            bookRepository.save(book);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -40,6 +47,11 @@ public class BookServiceImpl implements BookService {
             return null;
         }
         return bookMapper.mapBookToDto(book);
+    }
+
+    @Override
+    public void deleteBook(int id) {
+        bookRepository.delete(id);
     }
 
 

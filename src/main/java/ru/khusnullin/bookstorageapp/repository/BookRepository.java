@@ -2,6 +2,7 @@ package ru.khusnullin.bookstorageapp.repository;
 
 import ru.khusnullin.bookstorageapp.config.DatabaseConnection;
 import ru.khusnullin.bookstorageapp.entity.Book;
+import ru.khusnullin.bookstorageapp.entity.Reader;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -61,13 +62,17 @@ public class BookRepository implements CommonRepository<Book> {
     }
 
     @Override
-    public void save(Book entity) {
-        String query = "INSERT INTO books (id, title) VALUES (?, ?)";
+    public void save(Book book) {
+        String query = "INSERT INTO books (title, reader_id) VALUES (?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, entity.getId());
-            statement.setString(2, entity.getTitle());
+            statement.setString(1, book.getTitle());
+            if (book.getReader() != null) {
+                statement.setInt(2, book.getReader().getId());
+            } else {
+                statement.setNull(2, Types.INTEGER);
+            }
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,5 +90,28 @@ public class BookRepository implements CommonRepository<Book> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Book> findByReaderId(int readerId) {
+        List<Book> books = new ArrayList<>();
+        String query = "SELECT * FROM books WHERE reader_id = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, readerId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Book book = new Book();
+                book.setId(resultSet.getInt("id"));
+                book.setTitle(resultSet.getString("title"));
+                book.setReader(new Reader(resultSet.getInt("reader_id"), "", new ArrayList<>()));
+                books.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return books;
     }
 }

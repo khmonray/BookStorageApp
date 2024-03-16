@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -52,6 +53,34 @@ public class BookServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Обработка POST запросов
+        StringBuilder sb = new StringBuilder();
+        BufferedReader reader = req.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        String json = sb.toString();
+
+        bookService.addBook(json);
+
+        resp.setStatus(HttpServletResponse.SC_CREATED);
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String bookId = req.getParameter("id");
+
+        if (bookId == null || bookId.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Book ID is required");
+            return;
+        }
+        try {
+            int id = Integer.parseInt(bookId);
+            bookService.deleteBook(id);
+            resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        } catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error deleting book");
+        }
+    }
+
 }

@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface BookService {
     List<BookDto> getBooks();
-    BookDto addBook(BookDto bookDto);
+    void addBook(String json);
 
     BookDto getBookById(int id);
+
+    void deleteBook(int id);
 }
