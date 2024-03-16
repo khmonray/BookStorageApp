@@ -32,4 +32,15 @@ public class BookServiceImpl implements BookService {
         bookRepository.save(book);
         return bookDto;
     }
+
+    @Override
+    public BookDto getBookById(int id) {
+        Book book = bookRepository.findById(id);
+        if (book == null) {
+            return null;
+        }
+        return bookMapper.mapBookToDto(book);
+    }
+
+
 }
