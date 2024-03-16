@@ -17,7 +17,6 @@ public class DatabaseConnection implements AutoCloseable {
         }
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
-
     @Override
     public void close() throws Exception {
 
