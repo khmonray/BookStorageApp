@@ -9,6 +9,7 @@ import ru.khusnullin.bookstorageapp.config.DatabaseConnection;
 import ru.khusnullin.bookstorageapp.dto.BookDto;
 import ru.khusnullin.bookstorageapp.mapper.BookMapper;
 import ru.khusnullin.bookstorageapp.repository.BookRepository;
+import ru.khusnullin.bookstorageapp.repository.ReaderRepository;
 import ru.khusnullin.bookstorageapp.service.BookService;
 import ru.khusnullin.bookstorageapp.service.BookServiceImpl;
 

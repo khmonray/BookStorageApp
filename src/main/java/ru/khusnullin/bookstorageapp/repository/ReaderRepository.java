@@ -4,14 +4,12 @@ import ru.khusnullin.bookstorageapp.config.DatabaseConnection;
 import ru.khusnullin.bookstorageapp.entity.Book;
 import ru.khusnullin.bookstorageapp.entity.Reader;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReaderRepository implements CommonRepository<Reader> {
+
 
     @Override
     public List<Reader> findAll() {
@@ -61,12 +59,38 @@ public class ReaderRepository implements CommonRepository<Reader> {
     }
 
     @Override
-    public void save(Reader entity) {
+    public void save(Reader reader) {
+        String query = "INSERT INTO readers (name) VALUES (?)";
 
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, reader.getName());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void delete(int id) {
+        String query = "DELETE FROM readers WHERE id = ?";
 
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+/*    public List<Reader> findAllWithBooks() {
+        List<Reader> readers = findAll();
+        for (Reader reader : readers) {
+            List<Book> books = bookRepository.findByReaderId(reader.getId());
+            reader.setBooks(books);
+        }
+        return readers;
+    }*/
+
 }
