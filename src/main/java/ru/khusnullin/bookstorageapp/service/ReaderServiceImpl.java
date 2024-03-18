@@ -1,9 +1,12 @@
 package ru.khusnullin.bookstorageapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.khusnullin.bookstorageapp.dto.BookDto;
 import ru.khusnullin.bookstorageapp.dto.ReaderDto;
+import ru.khusnullin.bookstorageapp.entity.Book;
 import ru.khusnullin.bookstorageapp.entity.Reader;
 import ru.khusnullin.bookstorageapp.mapper.ReaderMapper;
+import ru.khusnullin.bookstorageapp.repository.BookRepository;
 import ru.khusnullin.bookstorageapp.repository.ReaderRepository;
 
 import java.io.IOException;
@@ -13,10 +16,12 @@ import java.util.stream.Collectors;
 public class ReaderServiceImpl implements ReaderService {
     private final ReaderRepository readerRepository;
     private final ReaderMapper readerMapper;
+    private final BookRepository bookRepository;
 
-    public ReaderServiceImpl(ReaderRepository readerRepository, ReaderMapper readerMapper) {
+    public ReaderServiceImpl(ReaderRepository readerRepository, ReaderMapper readerMapper, BookRepository bookRepository) {
         this.readerRepository = readerRepository;
         this.readerMapper = readerMapper;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -48,7 +53,11 @@ public class ReaderServiceImpl implements ReaderService {
     public ReaderDto getReader(int id) {
         Reader reader = readerRepository.findById(id);
         if (reader == null) {
-            return null;
+            try {
+                throw new IllegalArgumentException("Reader not found");
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException(e);
+            }
         }
         return readerMapper.mapReaderToDto(reader);
     }

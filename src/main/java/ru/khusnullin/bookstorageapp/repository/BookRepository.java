@@ -92,26 +92,4 @@ public class BookRepository implements CommonRepository<Book> {
         }
     }
 
-    public List<Book> findByReaderId(int readerId) {
-        List<Book> books = new ArrayList<>();
-        String query = "SELECT * FROM books WHERE reader_id = ?";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, readerId);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                Book book = new Book();
-                book.setId(resultSet.getInt("id"));
-                book.setTitle(resultSet.getString("title"));
-                book.setReader(new Reader(resultSet.getInt("reader_id"), "", new ArrayList<>()));
-                books.add(book);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return books;
-    }
 }

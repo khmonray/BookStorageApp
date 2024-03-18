@@ -1,6 +1,7 @@
 package ru.khusnullin.bookstorageapp.repository;
 
 import ru.khusnullin.bookstorageapp.config.DatabaseConnection;
+import ru.khusnullin.bookstorageapp.entity.Book;
 import ru.khusnullin.bookstorageapp.entity.Reader;
 
 import java.sql.Connection;
@@ -29,6 +30,8 @@ public class ReaderRepository implements CommonRepository<Reader> {
                 Reader reader = new Reader();
                 reader.setId(resultSet.getInt("id"));
                 reader.setName(resultSet.getString("name"));
+                List<Book> books = findBooksByReaderId(resultSet.getInt("id"));
+                reader.setBooks(books);
                 readers.add(reader);
             }
         } catch (SQLException | NullPointerException e) {
@@ -52,6 +55,8 @@ public class ReaderRepository implements CommonRepository<Reader> {
                 reader = new Reader();
                 reader.setId(resultSet.getInt("id"));
                 reader.setName(resultSet.getString("name"));
+                List<Book> books = findBooksByReaderId(resultSet.getInt("id"));
+                reader.setBooks(books);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,6 +89,26 @@ public class ReaderRepository implements CommonRepository<Reader> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Book> findBooksByReaderId(int readerId) {
+        List<Book> books = new ArrayList<>();
+        String query = "SELECT * FROM books WHERE reader_id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, readerId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Book book = new Book();
+                book.setId(resultSet.getInt("id"));
+                book.setTitle(resultSet.getString("title"));
+                book.setReader(new Reader(resultSet.getInt("reader_id"), "", new ArrayList<>()));
+                books.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return books;
     }
 
 }

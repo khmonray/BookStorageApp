@@ -23,12 +23,14 @@ public class ReaderMapper {
 
         List<BookDto> bookDtoList = books.stream()
                 .filter(Objects::nonNull)
+                .filter(book -> book.getReader() != null)
                 .map(book -> new BookDto(book.getId(), book.getTitle(), book.getReader().getId()))
                 .collect(Collectors.toList());
-        readerDto.setBookDtoList(bookDtoList);
+        readerDto.setBookList(bookDtoList);
 
         return readerDto;
     }
+
 
 
     public Reader mapDtoToReader(ReaderDto readerDto) {
@@ -36,7 +38,7 @@ public class ReaderMapper {
         reader.setId(readerDto.getId());
         reader.setName(readerDto.getName());
 
-        List<BookDto> bookDtoList = readerDto.getBookDtoList();
+        List<BookDto> bookDtoList = readerDto.getBookList();
         if (bookDtoList == null) {
             bookDtoList = new ArrayList<>();
         }

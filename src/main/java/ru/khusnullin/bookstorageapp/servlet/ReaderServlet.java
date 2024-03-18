@@ -1,8 +1,14 @@
 package ru.khusnullin.bookstorageapp.servlet;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.khusnullin.bookstorageapp.dto.BookDto;
 import ru.khusnullin.bookstorageapp.dto.ReaderDto;
+import ru.khusnullin.bookstorageapp.entity.Book;
+import ru.khusnullin.bookstorageapp.entity.Reader;
 import ru.khusnullin.bookstorageapp.mapper.ReaderMapper;
+import ru.khusnullin.bookstorageapp.repository.BookRepository;
 import ru.khusnullin.bookstorageapp.repository.ReaderRepository;
 import ru.khusnullin.bookstorageapp.service.ReaderService;
 import ru.khusnullin.bookstorageapp.service.ReaderServiceImpl;
@@ -15,13 +21,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "readerServlet", value = "/readers")
 public class ReaderServlet extends HttpServlet {
     private final ReaderService readerService;
 
     public ReaderServlet() {
-        this.readerService = new ReaderServiceImpl(new ReaderRepository(), new ReaderMapper());
+        this.readerService = new ReaderServiceImpl(new ReaderRepository(), new ReaderMapper(), new BookRepository());
     }
 
     @Override
@@ -86,4 +94,10 @@ public class ReaderServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error deleting reader");
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
 }
