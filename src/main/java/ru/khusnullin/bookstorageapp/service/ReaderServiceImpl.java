@@ -72,6 +72,7 @@ public class ReaderServiceImpl implements ReaderService {
         if (book == null) {
             throw new IllegalArgumentException("Book not found with id: " + bookId);
         }
+
         if (reader.getBooks() != null && !reader.getBooks().contains(book)) {
             reader.getBooks().add(book);
         } else if (reader.getBooks() == null) {
@@ -82,6 +83,4 @@ public class ReaderServiceImpl implements ReaderService {
         bookRepository.update(book);
         readerRepository.update(reader);
     }
-
-
 }
