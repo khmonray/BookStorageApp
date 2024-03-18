@@ -33,8 +33,8 @@ VALUES
 ('Echoes of the Past', 'A ghostly journey through time, uncovering secrets of the past.', 5),
 ('The Forgotten Kingdom', 'A quest to reclaim a lost kingdom, filled with danger and mystery.', 6),
 ('The Celestial Dance', 'A ballet of celestial bodies, where every move is a dance with destiny.', 7),
-('The Shadowed Path', 'A journey through the shadows of a forgotten civilization.', 8),
-('The Eternal Flame', 'A story of love and sacrifice in the face of eternal darkness.', 9),
-('The Lost Chronicles', 'An epic quest to uncover the secrets of a long-lost civilization.', 10);
+('The Shadowed Path', 'A journey through the shadows of a forgotten civilization.', 1),
+('The Eternal Flame', 'A story of love and sacrifice in the face of eternal darkness.', 2),
+('The Lost Chronicles', 'An epic quest to uncover the secrets of a long-lost civilization.', 3);
 
 
