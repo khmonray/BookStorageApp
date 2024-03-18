@@ -26,12 +26,31 @@ public class ReaderServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<ReaderDto> readers = readerService.getReaders();
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonReaders = objectMapper.writeValueAsString(readers);
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        resp.getWriter().write(jsonReaders);
+
+
+        String idParam = req.getParameter("id");
+
+        if (idParam != null && !idParam.isEmpty()) {
+            int id = Integer.parseInt(idParam);
+            ReaderDto readerDto = readerService.getReader(id);
+
+            if (readerDto != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonBook = objectMapper.writeValueAsString(readerDto);
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+                resp.getWriter().write(jsonBook);
+            } else {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
+        } else {
+            List<ReaderDto> readers = readerService.getReaders();
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonReaders = objectMapper.writeValueAsString(readers);
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(jsonReaders);
+        }
     }
 
     @Override
@@ -47,6 +66,24 @@ public class ReaderServlet extends HttpServlet {
         readerService.addReader(json);
 
         resp.setStatus(HttpServletResponse.SC_CREATED);
+
+
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String readerId = req.getParameter("id");
+
+        if (readerId == null || readerId.isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Reader ID is required");
+            return;
+        }
+        try {
+            int id = Integer.parseInt(readerId);
+            readerService.deleteReader(id);
+            resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        } catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error deleting reader");
+        }
+    }
 }

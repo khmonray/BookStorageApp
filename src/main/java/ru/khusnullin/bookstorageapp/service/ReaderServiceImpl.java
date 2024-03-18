@@ -1,9 +1,7 @@
 package ru.khusnullin.bookstorageapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.khusnullin.bookstorageapp.dto.BookDto;
 import ru.khusnullin.bookstorageapp.dto.ReaderDto;
-import ru.khusnullin.bookstorageapp.entity.Book;
 import ru.khusnullin.bookstorageapp.entity.Reader;
 import ru.khusnullin.bookstorageapp.mapper.ReaderMapper;
 import ru.khusnullin.bookstorageapp.repository.ReaderRepository;

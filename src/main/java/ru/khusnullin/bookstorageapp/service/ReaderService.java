@@ -1,16 +1,16 @@
 package ru.khusnullin.bookstorageapp.service;
 
 import ru.khusnullin.bookstorageapp.dto.ReaderDto;
-import ru.khusnullin.bookstorageapp.entity.Reader;
 
 import java.util.List;
 
-public interface ReaderService  {
-    public List<ReaderDto> getReaders();
-    public void addReader(String json);
+public interface ReaderService {
+    List<ReaderDto> getReaders();
 
-    public void deleteReader(int id);
+    void addReader(String json);
 
-    public ReaderDto getReader(int id);
+    void deleteReader(int id);
+
+    ReaderDto getReader(int id);
 
 }

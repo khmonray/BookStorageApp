@@ -1,10 +1,12 @@
 package ru.khusnullin.bookstorageapp.repository;
 
 import ru.khusnullin.bookstorageapp.config.DatabaseConnection;
-import ru.khusnullin.bookstorageapp.entity.Book;
 import ru.khusnullin.bookstorageapp.entity.Reader;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,14 +85,5 @@ public class ReaderRepository implements CommonRepository<Reader> {
             e.printStackTrace();
         }
     }
-
-/*    public List<Reader> findAllWithBooks() {
-        List<Reader> readers = findAll();
-        for (Reader reader : readers) {
-            List<Book> books = bookRepository.findByReaderId(reader.getId());
-            reader.setBooks(books);
-        }
-        return readers;
-    }*/
 
 }
