@@ -1,4 +1,3 @@
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +20,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BookServiceImplTest {
@@ -40,7 +38,7 @@ public class BookServiceImplTest {
     }
 
     @Test
-    public void testGetBooks_shouldReturnEmptyList() {
+    public void testGetBooksShouldReturnEmptyList() {
         List<Book> emptyList = Collections.emptyList();
         Mockito.when(bookRepository.findAll()).thenReturn(emptyList);
 
@@ -50,7 +48,7 @@ public class BookServiceImplTest {
     }
 
     @Test
-    public void testGetBooks_shouldReturnMappedDtos() {
+    public void testGetBooksShouldReturnMappedDtos() {
         List<Book> books = new ArrayList<>();
         books.add(new Book(1, "Book 1", "description", null));
         books.add(new Book(2, "Book 2", "description", null));
@@ -65,8 +63,9 @@ public class BookServiceImplTest {
 
         assertEquals(mappedDtos, actualBooks);
     }
+
     @Test
-    public void testAddBook_withValidJson() throws IOException {
+    public void testAddBookWithValidJson() throws IOException {
         String bookJson = "{\"id\": 1, \"title\": \"Book 1\"}";
         ObjectMapper objectMapper = new ObjectMapper();
         BookDto bookDto = objectMapper.readValue(bookJson, BookDto.class);
@@ -80,7 +79,7 @@ public class BookServiceImplTest {
     }
 
     @Test
-    public void testGetBookById_withExistingBook() {
+    public void testGetBookByIdWithExistingBook() {
         int id = 1;
         Book book = new Book(id, "Book 1", "description", null);
 
@@ -102,9 +101,6 @@ public class BookServiceImplTest {
 
         Mockito.verify(bookRepository).delete(id);
     }
-
-
-
 
 
 }
