@@ -25,14 +25,16 @@ VALUES ('John Doe'),
        ('James Taylor');
 
 INSERT INTO books (title, description, reader_id)
-VALUES ('Book 1', 'Description for Book 1', 1),
-       ('Book 2', 'Description for Book 2', 2),
-       ('Book 3', 'Description for Book 3', 3),
-       ('Book 4', 'Description for Book 4', 4),
-       ('Book 5', 'Description for Book 5', 5),
-       ('Book 6', 'Description for Book 6', 6),
-       ('Book 7', 'Description for Book 7', 7),
-       ('Book 8', 'Description for Book 8', 1),
-       ('Book 9', 'Description for Book 9', 2),
-       ('Book 10', 'Description for Book 10', 3);
+VALUES
+('The Enchanted Forest', 'A tale of magic and adventure in a mystical woodland.', 1),
+('The Last Star', 'A journey through space to save the galaxy from impending doom.', 2),
+('Whispers of the Wind', 'A saga of love and loss in the heart of a stormy city.', 3),
+('The Silent Sea', 'An underwater odyssey of discovery and survival.', 4),
+('Echoes of the Past', 'A ghostly journey through time, uncovering secrets of the past.', 5),
+('The Forgotten Kingdom', 'A quest to reclaim a lost kingdom, filled with danger and mystery.', 6),
+('The Celestial Dance', 'A ballet of celestial bodies, where every move is a dance with destiny.', 7),
+('The Shadowed Path', 'A journey through the shadows of a forgotten civilization.', 8),
+('The Eternal Flame', 'A story of love and sacrifice in the face of eternal darkness.', 9),
+('The Lost Chronicles', 'An epic quest to uncover the secrets of a long-lost civilization.', 10);
+
 
