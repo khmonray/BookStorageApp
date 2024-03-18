@@ -1,14 +1,9 @@
 package ru.khusnullin.bookstorageapp.servlet;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.khusnullin.bookstorageapp.dto.BookDto;
 import ru.khusnullin.bookstorageapp.dto.ReaderDto;
-import ru.khusnullin.bookstorageapp.entity.Book;
-import ru.khusnullin.bookstorageapp.entity.Reader;
 import ru.khusnullin.bookstorageapp.mapper.ReaderMapper;
-import ru.khusnullin.bookstorageapp.repository.BookRepository;
 import ru.khusnullin.bookstorageapp.repository.ReaderRepository;
 import ru.khusnullin.bookstorageapp.service.ReaderService;
 import ru.khusnullin.bookstorageapp.service.ReaderServiceImpl;
@@ -21,15 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @WebServlet(name = "readerServlet", value = "/readers")
 public class ReaderServlet extends HttpServlet {
     private final ReaderService readerService;
 
     public ReaderServlet() {
-        this.readerService = new ReaderServiceImpl(new ReaderRepository(), new ReaderMapper(), new BookRepository());
+        this.readerService = new ReaderServiceImpl(new ReaderRepository(), new ReaderMapper());
     }
 
     @Override
@@ -97,7 +90,26 @@ public class ReaderServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            String readerIdParam = req.getParameter("id");
+            if (readerIdParam == null) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Reader ID is required");
+                return;
+            }
+            int readerId = Integer.parseInt(readerIdParam);
 
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(req.getReader());
+            int bookId = jsonNode.get("bookId").asInt();
+
+            readerService.assignBookToReader(readerId, bookId);
+
+            resp.setStatus(HttpServletResponse.SC_OK);
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid reader ID or book ID");
+        } catch (IOException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request body");
+        }
     }
 
 }

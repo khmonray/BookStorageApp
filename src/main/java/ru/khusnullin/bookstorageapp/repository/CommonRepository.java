@@ -10,4 +10,6 @@ public interface CommonRepository<T> {
     void save(T entity);
 
     void delete(int id);
+
+    void update(T t);
 }

@@ -13,4 +13,5 @@ public interface ReaderService {
 
     ReaderDto getReader(int id);
 
+    void assignBookToReader(int readerId, int bookId);
 }

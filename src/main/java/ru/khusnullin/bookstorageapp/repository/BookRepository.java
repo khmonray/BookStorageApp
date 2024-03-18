@@ -2,7 +2,6 @@ package ru.khusnullin.bookstorageapp.repository;
 
 import ru.khusnullin.bookstorageapp.config.DatabaseConnection;
 import ru.khusnullin.bookstorageapp.entity.Book;
-import ru.khusnullin.bookstorageapp.entity.Reader;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -91,5 +90,25 @@ public class BookRepository implements CommonRepository<Book> {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void update(Book book) {
+        String query = "UPDATE books SET title = ?, reader_id = ? WHERE id = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, book.getTitle());
+            if (book.getReader() != null) {
+                statement.setInt(2, book.getReader().getId());
+            } else {
+                statement.setNull(2, Types.INTEGER);
+            }
+            statement.setInt(3, book.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

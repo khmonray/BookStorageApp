@@ -32,7 +32,6 @@ public class ReaderMapper {
     }
 
 
-
     public Reader mapDtoToReader(ReaderDto readerDto) {
         Reader reader = new Reader();
         reader.setId(readerDto.getId());

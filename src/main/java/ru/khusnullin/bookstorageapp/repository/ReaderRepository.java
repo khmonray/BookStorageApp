@@ -13,7 +13,6 @@ import java.util.List;
 
 public class ReaderRepository implements CommonRepository<Reader> {
 
-
     @Override
     public List<Reader> findAll() {
         List<Reader> readers = new ArrayList<>();
@@ -90,6 +89,22 @@ public class ReaderRepository implements CommonRepository<Reader> {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void update(Reader reader) {
+        String query = "UPDATE readers SET name = ? WHERE id = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, reader.getName());
+            statement.setInt(2, reader.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public List<Book> findBooksByReaderId(int readerId) {
         List<Book> books = new ArrayList<>();

@@ -1,7 +1,6 @@
 package ru.khusnullin.bookstorageapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.khusnullin.bookstorageapp.dto.BookDto;
 import ru.khusnullin.bookstorageapp.dto.ReaderDto;
 import ru.khusnullin.bookstorageapp.entity.Book;
 import ru.khusnullin.bookstorageapp.entity.Reader;
@@ -10,6 +9,7 @@ import ru.khusnullin.bookstorageapp.repository.BookRepository;
 import ru.khusnullin.bookstorageapp.repository.ReaderRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +18,10 @@ public class ReaderServiceImpl implements ReaderService {
     private final ReaderMapper readerMapper;
     private final BookRepository bookRepository;
 
-    public ReaderServiceImpl(ReaderRepository readerRepository, ReaderMapper readerMapper, BookRepository bookRepository) {
+    public ReaderServiceImpl(ReaderRepository readerRepository, ReaderMapper readerMapper) {
         this.readerRepository = readerRepository;
         this.readerMapper = readerMapper;
-        this.bookRepository = bookRepository;
+        this.bookRepository = new BookRepository();
     }
 
     @Override
@@ -61,5 +61,27 @@ public class ReaderServiceImpl implements ReaderService {
         }
         return readerMapper.mapReaderToDto(reader);
     }
+
+    public void assignBookToReader(int readerId, int bookId) {
+        Reader reader = readerRepository.findById(readerId);
+        if (reader == null) {
+            throw new IllegalArgumentException("Reader not found with id: " + readerId);
+        }
+
+        Book book = bookRepository.findById(bookId);
+        if (book == null) {
+            throw new IllegalArgumentException("Book not found with id: " + bookId);
+        }
+        if (reader.getBooks() != null && !reader.getBooks().contains(book)) {
+            reader.getBooks().add(book);
+        } else if (reader.getBooks() == null) {
+            reader.setBooks(new ArrayList<>());
+        }
+        book.setReader(reader);
+        reader.getBooks().add(book);
+        bookRepository.update(book);
+        readerRepository.update(reader);
+    }
+
 
 }
