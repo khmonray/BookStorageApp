@@ -11,7 +11,7 @@ create TABLE books
     title       VARCHAR(255) NOT NULL,
     description TEXT,
     reader_id   INT,
-    FOREIGN KEY (reader_id) REFERENCES readers (id)
+    FOREIGN KEY (reader_id) REFERENCES readers (id) ON DELETE SET NULL
 );
 
 

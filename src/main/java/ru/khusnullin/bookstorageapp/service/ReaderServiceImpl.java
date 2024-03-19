@@ -53,11 +53,7 @@ public class ReaderServiceImpl implements ReaderService {
     public ReaderDto getReader(int id) {
         Reader reader = readerRepository.findById(id);
         if (reader == null) {
-            try {
-                throw new IllegalArgumentException("Reader not found");
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            }
+            return null;
         }
         return readerMapper.mapReaderToDto(reader);
     }
