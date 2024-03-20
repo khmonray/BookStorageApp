@@ -53,7 +53,7 @@ public class ReaderServiceImpl implements ReaderService {
     public ReaderDto getReader(int id) {
         Reader reader = readerRepository.findById(id);
         if (reader == null) {
-            return null;
+            throw new RuntimeException();
         }
         return readerMapper.mapReaderToDto(reader);
     }

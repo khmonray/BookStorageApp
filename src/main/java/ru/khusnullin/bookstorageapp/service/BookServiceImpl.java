@@ -5,6 +5,7 @@ import ru.khusnullin.bookstorageapp.dto.BookDto;
 import ru.khusnullin.bookstorageapp.entity.Book;
 import ru.khusnullin.bookstorageapp.mapper.BookMapper;
 import ru.khusnullin.bookstorageapp.repository.BookRepository;
+import ru.khusnullin.bookstorageapp.repository.ReaderRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,10 +15,12 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final ReaderRepository readerRepository;
 
     public BookServiceImpl(BookRepository bookRepository, BookMapper bookMapper) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
+        readerRepository = new ReaderRepository();
     }
 
     @Override
@@ -50,9 +53,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteBook(int id) {
-        bookRepository.delete(id);
+    public void deleteBook(int bookId) {
+        bookRepository.delete(bookId);
     }
 
-
+    public void update(int bookId, BookDto bookDto) {
+        if (bookDto == null) {
+            throw new IllegalArgumentException("BookDto cannot be null");
+        }
+        Book book = bookRepository.findById(bookId);
+        book.setTitle(bookDto.getTitle());
+        book.setReader(readerRepository.findById(bookDto.getReaderId()));
+        bookRepository.update(book);
+    }
 }

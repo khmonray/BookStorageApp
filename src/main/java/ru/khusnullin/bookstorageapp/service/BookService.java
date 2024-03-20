@@ -9,7 +9,9 @@ public interface BookService {
 
     void addBook(String json);
 
-    BookDto getBookById(int id);
+    BookDto getBookById(int bookId);
 
-    void deleteBook(int id);
+    void deleteBook(int bookId);
+
+    void update(int bookId, BookDto bookDto);
 }

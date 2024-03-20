@@ -19,7 +19,7 @@ INSERT INTO readers (name)
 VALUES ('John Doe'),
        ('Alice Smith'),
        ('Michael Johnson'),
-       ('Emily Brown'),
+       ('Sasha Grey'),
        ('David Wilson'),
        ('Sarah Davis'),
        ('James Taylor');

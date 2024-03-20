@@ -1,7 +1,9 @@
 package ru.khusnullin.bookstorageapp.servlet;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.khusnullin.bookstorageapp.dto.BookDto;
+import ru.khusnullin.bookstorageapp.entity.Book;
 import ru.khusnullin.bookstorageapp.mapper.BookMapper;
 import ru.khusnullin.bookstorageapp.repository.BookRepository;
 import ru.khusnullin.bookstorageapp.service.BookService;
@@ -83,4 +85,23 @@ public class BookServlet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String idParam = req.getParameter("id");
+        if (idParam == null) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("Book ID is required");
+            return;
+        }
+        int bookId = Integer.parseInt(idParam);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            BookDto bookDto = objectMapper.readValue(req.getReader(), BookDto.class);
+            bookService.update(bookId, bookDto);
+            resp.setStatus(HttpServletResponse.SC_OK);
+        } catch (IllegalArgumentException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("Invalid input: " + e.getMessage());
+        }
+    }
 }
